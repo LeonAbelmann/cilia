@@ -1,6 +1,5 @@
 import numpy as np
 from numpy import pi as pi
-#from numpy import cumtrapz  
 from scipy.integrate import solve_bvp
 from scipy.integrate import cumulative_trapezoid as cumtrapz
 import matplotlib.pyplot as plt
