@@ -56,6 +56,9 @@ from scipy.integrate import solve_bvp
 from scipy.integrate import cumulative_trapezoid as cumtrapz
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import imageio_ffmpeg
+import matplotlib
+matplotlib.rcParams['animation.ffmpeg_path'] = imageio_ffmpeg.get_ffmpeg_exe()
 
 # Input parameters
 L   = 1e-2     # Length in meters
