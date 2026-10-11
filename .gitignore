@@ -1,0 +1,26 @@
+# --- Animation output ---
+*.mp4
+*.avi
+*.mov
+*.gif
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.py~
+*.bak
+
+# --- Editor / OS backups ---
+*~
+*.swp
+.DS_Store
+Thumbs.db
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Data / scratch output ---
+*.png
+*.csv
+*.npy
+*.npz

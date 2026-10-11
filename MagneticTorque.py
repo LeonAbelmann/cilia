@@ -1,3 +1,45 @@
+####################################################################
+# MagneticTorque.py
+#
+# Computes the quasi-static equilibrium shape of a hard-magnetic
+# elastic rod in a single, fixed uniform
+# magnetic field (magnitude B, angle phi), and compares the
+# numerical result with the analytical small-deflection solution.
+#
+# Physics:
+#   A thin elastic rod is clamped vertically at its base. Its
+#   remanent magnetisation Mr gives a magnetic torque per unit
+#   length  w = Mr * A * B * sin(theta - phi)  that tries to align
+#   the rod with the applied field. At equilibrium the bending
+#   moment balances the magnetic torque:
+#
+#       EI * theta'' = w * sin(theta - phi)
+#       theta(0) = 0      (clamped base)
+#       M(L) = 0          (moment-free tip)
+#
+#   solved as a first-order system in (theta, M):
+#       theta' = -M / EI
+#       M'     = -w * sin(theta - phi)
+#
+#   The initial guess is the straight rod (theta = 0, M = 0),
+#   so the solution found is the branch connected to the unloaded
+#   state. Valid for fields where this branch is stable: at high
+#   fields (w*L^2/EI >> 1) the physical solution may snap to a
+#   different state that this script cannot find.
+#
+#   Analytical benchmark (small deflections, sin(theta - phi)
+#   approximated by theta - phi and arc length s ~ y):
+#       theta(s) = (w/EI) * (L*s - s^2/2)
+#       x(s)    = (w/EI) * (L*s^2/2 - s^3/6)
+#   Agreement with the numerical solution validates the BVP.
+#
+# Output:
+#   - Plot of the numerical rod shape (x, y) in mm, together with
+#     the analytical small-deflection shape.
+#   - Saved to MagneticTorque.pdf.
+#
+# Units: SI throughout (m, Pa, T, A/m).
+####################################################################
 import numpy as np
 from numpy import pi as pi
 from scipy.integrate import solve_bvp
@@ -63,13 +105,3 @@ plt.legend()
 plt.savefig('MagneticTorque.pdf', format='pdf', dpi=200, bbox_inches='tight')
 #plt.show()
 
-# Plot the shape
-# plt.plot(1000*x_s, 1000*y_s, label='Numerical')
-# plt.xlabel('x [mm]')
-# plt.ylabel('y [mm]')
-# plt.axis('equal')
-# plt.grid(True)
-# plt.legend()
-# # Save the plot
-# plt.savefig('MagneticTorque.pdf', format='pdf')
-# # plt.show()
