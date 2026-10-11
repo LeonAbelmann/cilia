@@ -11,8 +11,7 @@ the elastica equation numerically.
    Notebook | Description |
  |---|---|
  | `MagneticTorque.ipynb` | Equilibrium shape in a single fixed field, compared against the analytical small-deflection solution. |
- | `MagneticTorqueSeries.ipynb` | Quasi-static shapes under a rotating
- field, tracked by continuation. **Low fields only**  - beyond the fold instability the quasi-static branch becomes unstable. |
+ | `MagneticTorqueSeries.ipynb` | Quasi-static shapes under a rotating field, tracked by continuation. **Low fields only**  - beyond the fold instability the quasi-static branch becomes unstable. |
  | `MagneticTorqueDampingSeries.ipynb` | Time simulation of the overdamped rod under a rotating field. Handles the snap-through (fold) instabilities at high fields naturally; valid at all field strengths. |
 
 Typical progression: use `MagneticTorque` to validate against the
