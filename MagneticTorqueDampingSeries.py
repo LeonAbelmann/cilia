@@ -57,7 +57,7 @@ L      = 1e-2     # Length in meters
 D      = 1e-3     # Diameter in meters
 E      = 1.429e6  # Youngs Modulus in Pa
 Mr     = 52e3     # Remanent magnetisation in A/m
-alpha  = 0        # Angle of moment wrt rod axis
+alpha  = pi/2     # Angle of moment wrt rod axis in rad
 
 # Applied Field:
 # constant magnitude Bval, angle rotating 0 to 2*pi in N steps
@@ -107,7 +107,7 @@ print('frame spacing:', T/N, 's')
 def de(t, theta):
     phi = phi_of_t(t)
     elasticterm = EI*theta_double_prime(theta)
-    torqueterm  = w_max*np.sin(theta - phi)
+    torqueterm  = w_max*np.sin(theta - phi + alpha)
     dampedterm  = ( elasticterm - torqueterm) / gamma
     return dampedterm
 
