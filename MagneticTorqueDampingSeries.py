@@ -12,11 +12,14 @@
 #   rotating once around in T seconds). The rod bends against its
 #   flexural rigidity EI.
 #
+#   The angle of the magnetic moment with respect to the rod axis is
+#   defined by alpha, and can vary along the rod
+#
 #   Instead of solving the quasi-static elastica BVP (which has
 #   fold instabilities where the solver must "jump branches"),
 #   we simulate the overdamped dynamics
 #
-#       gamma * dtheta/dt = EI * theta'' - w*sin(theta - phi(t))
+#     gamma * dtheta/dt = EI * theta'' - w*sin(theta - phi(t) + alpha)
 #
 #   This is gradient descent on the rod's energy: between folds
 #   the rod relaxes to the (quasi-)static equilibria, and at the
@@ -32,6 +35,7 @@
 #   - theta(s) discretised on n finite-difference nodes; clamp
 #     theta(0)=0 built into the stencil, free end theta'(L)=0
 #     via a ghost node.
+#   - angle_nodes(s) angle of moment at the discretized points
 #   - Time integration with scipy's implicit BDF (stiff solver).
 #
 # Output:
@@ -57,13 +61,12 @@ L      = 1e-2     # Length in meters
 D      = 1e-3     # Diameter in meters
 E      = 1.429e6  # Youngs Modulus in Pa
 Mr     = 52e3     # Remanent magnetisation in A/m
-alpha  = pi/2     # Angle of moment wrt rod axis in rad
 
 # Applied Field:
 # constant magnitude Bval, angle rotating 0 to 2*pi in N steps
 # in time T
 Bval = 0.1 # T
-N    = 100
+N    = 400
 T    = 60  # s, time for one rotation of the field
 
 # Field angle as a function of time: one full revolution in T seconds
@@ -76,6 +79,16 @@ def phi_of_t(t):
 n      = 100
 s_grid = np.linspace(0, L, n+1)
 ds = s_grid[1] - s_grid[0]
+
+# Angle of magnetic moment along the rod, s=0 is the base (fixed)
+# s=L is the free end.
+def angle(s,L):
+    angle = 2*pi*(s/L)
+    return angle
+
+# calculate alpha(s) at the n unknown nodes (s = ds ... L); 
+alpha_nodes = angle(s_grid[1:], L) 
+
 
 # Help function to calculate second derivative of theta
 # Note theta(0) = 0 (clamped end)
@@ -107,7 +120,7 @@ print('frame spacing:', T/N, 's')
 def de(t, theta):
     phi = phi_of_t(t)
     elasticterm = EI*theta_double_prime(theta)
-    torqueterm  = w_max*np.sin(theta - phi + alpha)
+    torqueterm  = w_max*np.sin(theta - phi + alpha_nodes)
     dampedterm  = ( elasticterm - torqueterm) / gamma
     return dampedterm
 
