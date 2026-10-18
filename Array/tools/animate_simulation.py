@@ -14,7 +14,7 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from fields import FieldSequence
+from engine import FieldSequence
 
 import imageio_ffmpeg
 

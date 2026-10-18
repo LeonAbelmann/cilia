@@ -8,15 +8,15 @@ Layout: '# key : value' header, then rows 'x [mm], y [mm], result_file'.
 The same result file may appear on multiple rows (drawn at each position).
 All listed results must share the same time grid (validated at load).
 """
+import os
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-from animate_simulation import reconstruct_shape   
-from animate_simulation import load_simulation     
+from tools.animate_simulation import reconstruct_shape, load_simulation     
 
-from fields import FieldSequence
+from engine import FieldSequence
 
 import imageio_ffmpeg
 
@@ -47,7 +47,7 @@ def load_layout(filename):
     return meta, rows
 
 
-def animate_batch(layout_file='carpet.csv', interval_ms=75):
+def animate_batch(layout_file='carpet.csv', interval_ms=75, outfile=None):
     """Animate all rods declared in the layout, side by side."""
     meta, rows = load_layout(layout_file)
 
@@ -154,8 +154,10 @@ def animate_batch(layout_file='carpet.csv', interval_ms=75):
                                   interval=interval_ms, blit=True)
     plt.show()
 
-    # Save as MP4 
-    ani.save('batch.mp4', writer='ffmpeg', fps=10)
+    # Save as MP4
+    # in animate_batch:
+    outfile = outfile or os.path.join(os.path.dirname(os.path.abspath(layout_file)), 'batch.mp4')
+    ani.save(outfile, writer='ffmpeg', fps=10)
 
     return ani
 

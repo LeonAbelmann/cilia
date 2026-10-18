@@ -4,7 +4,7 @@ verify the known values, and plot the interpolated field."""
 
 import numpy as np
 import matplotlib.pyplot as plt
-from fields import FieldSequence
+from engine import FieldSequence
 
 # --- Load ---
 field = FieldSequence("Constant_50mT.csv")

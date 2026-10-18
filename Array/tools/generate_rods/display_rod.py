@@ -1,7 +1,7 @@
 # test_rod.py
 import numpy as np
 import matplotlib.pyplot as plt
-from rods import RodDescription
+from engine import RodDescription
 
 rod = RodDescription('Rod_0.csv')
 

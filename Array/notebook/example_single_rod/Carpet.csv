@@ -1,0 +1,6 @@
+# Carpet layout
+# description : Test carpet
+# created     : 2026-10-17 by Leon Abelmann
+# units       : x [mm]
+x,y,result_file
+0 ,0, Result.csv

@@ -7,7 +7,7 @@ Mr     = 52e3     # Remanent magnetisation in A/m
 alpha  = 90        # Angle between moment and rod axis
 N      = 20       # Number of nodes (= number of segments + 1)
 
-filename = "Rod_01.csv"
+filename = "Rod.csv"
 header_text ="""\
 # Rod definition
 # description : straight rod length 1 cm, magnetisation perpendicular to rod

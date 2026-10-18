@@ -63,7 +63,6 @@ def write_output(result, field, rod, settings,
         f"# solver      : BDF, rtol={settings.rtol}, atol={settings.atol}",
         f"# units       : t [s], theta [rad]",
         "# note        : theta(s=0)=0 (clamped) not stored; s values above",
-        col_row,
     ]
     header_text = "\n".join(header_lines) + "\n"
 

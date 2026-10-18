@@ -1,0 +1,9 @@
+# Experiment manifest
+# description : Test file, two rods
+# created     : 2026-10-17 by Leon Abelmann
+# program     : hand-written
+# field file  : Rotating_Field_50mT.csv
+rod_file,result_file
+Rod.csv,Result.csv
+
+

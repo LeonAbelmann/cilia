@@ -70,13 +70,12 @@ def relax_to_equilibrium(field, s_nodes, ds, EI_nodes, w_nodes,
     tau = gamma * ds**2 / EI_mean
     theta = np.zeros_like(s_nodes)
 
-    for _ in range(50):                      # max 10 retries if not settled
+    for _ in range(50):  # max 50 retries if not settled
         sol = solve_ivp(rhs_frozen, (0.0, 20*tau), theta, method='BDF',
                         rtol=settings.rtol, atol=settings.atol)
         theta = sol.y[:, -1]
         rate = np.max(np.abs(rhs_frozen(0.0, theta)))
-        print(rate, rate*tau, sol.y[-1][-1])
-        if rate * tau < 1e-3:                # settled: |dtheta/dt| << 1/tau
+        if rate * tau < 1e-3:    # settled: |dtheta/dt| << 1/tau
             return theta
     raise RuntimeError(
         "pre-relaxation did not converge to a stable equilibrium "

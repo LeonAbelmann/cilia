@@ -24,19 +24,6 @@ from output import write_output
 FIELD_FILE = 'Constant_50mT.csv'
 ROD_FILE   = 'Rod_90.csv'
 
-# Output file
-def next_simulation_filename(directory='.'):
-    """simulation_NNN.csv with NNN one above the highest existing number."""
-    numbers = []
-    for path in glob.glob(os.path.join(directory, 'simulation_*.csv')):
-        stem = os.path.splitext(os.path.basename(path))[0]
-        try:
-            numbers.append(int(stem.split('_')[1]))
-        except (IndexError, ValueError):
-            continue          # not our naming scheme; ignore
-    next_number = max(numbers, default=-1) + 1
-    return os.path.join(directory, f'simulation_{next_number:03d}.csv')
-
 
 def main():
     # --- Load inputs ---
