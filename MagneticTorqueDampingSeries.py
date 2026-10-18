@@ -43,7 +43,7 @@
 #   - Shapes (x(s), y(s)) per frame; tip trajectory.
 #   - Animation of the rod, field arrow, and tip trajectory,
 #     saved to MagneticTorqueAnimation.mp4.
-#
+   #
 # Units: SI throughout (m, Pa, T, A/m, s).
 ####################################################################
 import numpy as np
@@ -65,8 +65,8 @@ Mr     = 52e3     # Remanent magnetisation in A/m
 # Applied Field:
 # constant magnitude Bval, angle rotating 0 to 2*pi in N steps
 # in time T
-Bval = 0.1 # T
-N    = 400
+Bval = 0.05 # T
+N    = 10
 T    = 60  # s, time for one rotation of the field
 
 # Field angle as a function of time: one full revolution in T seconds
@@ -76,19 +76,18 @@ def phi_of_t(t):
 # Discretisation of rod
 # s_grid[0] = clamp (theta = 0, not a state),
 # s_grid[1:] = n unknown theta values, last one at s = L (free end).
-n      = 100
+n      = 19
 s_grid = np.linspace(0, L, n+1)
 ds = s_grid[1] - s_grid[0]
 
 # Angle of magnetic moment along the rod, s=0 is the base (fixed)
 # s=L is the free end.
 def angle(s,L):
-    angle = 2*pi*(s/L)
+    angle = 0*2*pi*(s/L)
     return angle
 
 # calculate alpha(s) at the n unknown nodes (s = ds ... L); 
 alpha_nodes = angle(s_grid[1:], L) 
-
 
 # Help function to calculate second derivative of theta
 # Note theta(0) = 0 (clamped end)
@@ -130,7 +129,7 @@ theta0 = np.zeros(n)           # initial state: straight rod
 t_eval = np.linspace(0, T, N)  # time sample points
 
 sol = solve_ivp(de, (0, T), theta0, method='BDF',
-                t_eval=t_eval, rtol=1e-4, atol=1e-6)
+                t_eval=t_eval, rtol=1e-6, atol=1e-8)
 
 if not sol.success:
     print(f"Warning: time integration failed: {sol.message}")
@@ -147,6 +146,54 @@ for k, t in enumerate(sol.t):
 
 # Calculate the tip positions
 tips = np.array([[x_s[-1], y_s[-1]] for x_s, y_s in shapes])
+
+# ------------------------- CSV output -----------------------------
+# Write theta(s,t) in the same format as run_simulation.py, so the
+# two pipelines can be compared directly (np.allclose / diff).
+import os, glob, datetime
+
+# s positions of the stored nodes (interior nodes, clamp implied)
+s_nodes_out = s_grid[1:]                      # n values, ds .. L
+
+# table: rows = frames, columns = t + theta_1..theta_n
+data_out = np.column_stack([sol.t, sol.y.T])
+
+col_row = 't,' + ','.join(f'theta_{i+1}' for i in range(n))
+header_lines = [
+    "# Simulation result (reference: MagneticTorqueDampingSeries.py)",
+    f"# created     : {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+    "# program     : MagneticTorqueDampingSeries.py",
+    "# field file  : (analytic: constant B, rotating phi)",
+    f"# field desc  : B={Bval} T, phi=2*pi*t/{T}s",
+    "# rod file    : (analytic: uniform rod)",
+    f"# rod desc    : L={L} m, D={D} m, E={E:.4e} Pa, Mr={Mr} A/m, alpha(s)=...",
+    f"# rod L [m]   : {L:.6e}",
+    f"# n_nodes     : {n} (interior; theta(0)=0 clamp, theta'(L)=0)",
+    f"# s_nodes [m] : " + ",".join(f"{s:.6e}" for s in s_nodes_out),
+    f"# gamma [N.s] : {gamma:.6e}",
+    "# gamma_ratio : 1e-4",
+    f"# solver      : BDF, rtol=1e-4, atol=1e-6",
+    f"# units       : t [s], theta [rad]",
+    "# note        : theta(s=0)=0 (clamped) not stored; s values above",
+    col_row,
+]
+
+def next_reference_filename(directory='.'):
+    """reference_NNN.csv, NNN one above the highest existing."""
+    numbers = []
+    for path in glob.glob(os.path.join(directory, 'reference_*.csv')):
+        stem = os.path.splitext(os.path.basename(path))[0]
+        try:
+            numbers.append(int(stem.split('_')[1]))
+        except (IndexError, ValueError):
+            continue
+    return os.path.join(directory,
+                         f'reference_{max(numbers, default=-1)+1:03d}.csv')
+
+outfile = next_reference_filename()
+np.savetxt(outfile, data_out, delimiter=",", fmt="%.8e",
+           header="\n".join(header_lines) + "\n", comments="")
+print(f"Wrote {outfile}: {data_out.shape[0]} frames x {data_out.shape[1]} cols")
 
 # ----------------------------- Animation --------------------------
 fig, ax = plt.subplots(figsize=(8, 6))

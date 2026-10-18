@@ -21,6 +21,5 @@ Thumbs.db
 
 # --- Data / scratch output ---
 *.png
-*.csv
 *.npy
 *.npz

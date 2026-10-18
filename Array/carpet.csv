@@ -1,0 +1,25 @@
+# Carpet layout
+# description : Test carpet
+# created     : 2026-10-17 by Leon Abelmann
+# units       : x [mm]
+x,y,result_file
+0 ,0,Manifest_00.csv
+10,0,Manifest_20.csv
+20,0,Manifest_40.csv
+30,0,Manifest_60.csv
+40,0,Manifest_80.csv
+50,0,Manifest_100.csv
+60,0,Manifest_120.csv
+70,0,Manifest_140.csv
+80,0,Manifest_160.csv
+90,0,Manifest_180.csv
+100,0,Manifest_200.csv
+110,0,Manifest_220.csv
+120,0,Manifest_240.csv
+130,0,Manifest_260.csv
+140,0,Manifest_280.csv
+150,0,Manifest_300.csv
+160,0,Manifest_320.csv
+170,0,Manifest_340.csv
+180,0,Manifest_360.csv
+

@@ -1,0 +1,27 @@
+# Experiment manifest
+# description : Test file, two rods
+# created     : 2026-10-17 by Leon Abelmann
+# program     : hand-written
+# field file  : Constant_50mT.csv
+rod_file,result_file
+Rod_00.csv,manifest_00.csv
+Rod_20.csv,manifest_20.csv
+Rod_40.csv,manifest_40.csv
+Rod_60.csv,manifest_60.csv
+Rod_80.csv,manifest_80.csv
+Rod_100.csv,manifest_100.csv
+Rod_120.csv,manifest_120.csv
+Rod_140.csv,manifest_140.csv
+Rod_160.csv,manifest_160.csv
+Rod_180.csv,manifest_180.csv
+Rod_200.csv,manifest_200.csv
+Rod_220.csv,manifest_220.csv
+Rod_240.csv,manifest_240.csv
+Rod_260.csv,manifest_260.csv
+Rod_280.csv,manifest_280.csv
+Rod_300.csv,manifest_300.csv
+Rod_320.csv,manifest_320.csv
+Rod_340.csv,manifest_340.csv
+Rod_360.csv,manifest_360.csv
+
+
